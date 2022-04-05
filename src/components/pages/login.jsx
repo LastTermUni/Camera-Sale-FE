@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Checkbox, Col, Form, Input, Layout, Row } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { NavLink } from "react-router-dom";
 
 export default function Login() {
   return (
@@ -62,8 +63,10 @@ export default function Login() {
                   Đăng nhập
                 </Button>
                 <div style={{ float: "right" }}>
-                  {" "}
-                  Hoặc <a href="/register">Đăng ký!</a>
+                  Hoặc
+                  <NavLink to={"/register"}>
+                    <a> Đăng ký!</a>
+                  </NavLink>
                 </div>
               </Form.Item>
             </Form>

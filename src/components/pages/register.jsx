@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import {
   Button,
   Cascader,
@@ -173,7 +174,10 @@ export default function Register() {
                   Đăng ký
                 </Button>
                 <div style={{ float: "right" }}>
-                  Đã có tài khoản? <a href="/login">Đăng nhập!</a>
+                  Đã có tài khoản?
+                  <NavLink to={"/login"}>
+                    <a> Đăng nhập!</a>
+                  </NavLink>
                 </div>
               </Form.Item>
             </Form>
