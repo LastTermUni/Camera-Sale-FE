@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { addCart } from "../../redux/action";
+import Skeleton from "react-loading-skeleton";
 
 const { Content } = Layout;
 
@@ -43,6 +44,31 @@ export const Home = () => {
     getProducts();
   }, []);
 
+  const Loading = () => {
+    return (
+      <>
+        <div style={{ margin: "16px" }}>
+          <Row gutter={[8, 8]} style={{ justifyContent: "center" }}>
+            <Col span={4} style={{ margin: "17px" }}>
+              <Skeleton width={240} height={380} />
+            </Col>
+            <Col span={4} style={{ margin: "17px" }}>
+              <Skeleton width={240} height={380} />
+            </Col>
+            <Col span={4} style={{ margin: "17px" }}>
+              <Skeleton width={240} height={380} />
+            </Col>
+            <Col span={4} style={{ margin: "17px" }}>
+              <Skeleton width={240} height={380} />
+            </Col>
+            <Col span={4} style={{ margin: "17px" }}>
+              <Skeleton width={240} height={380} />
+            </Col>
+          </Row>
+        </div>
+      </>
+    );
+  };
   const ShowProducts = () => {
     return (
       <>
@@ -118,7 +144,7 @@ export const Home = () => {
           </Carousel>
           <Divider orientation="center">Sản phẩm mới nhất</Divider>
           <Row gutters={20}>
-            <ShowProducts />
+            {loading ? <Loading/>: <ShowProducts />}
           </Row>
         </Content>
       </Layout>

@@ -23,6 +23,8 @@ export const Navbar = () => {
       : header.classList.remove("is-sticky");
   };
   //
+
+  
   return (
     <>
       <Layout>
