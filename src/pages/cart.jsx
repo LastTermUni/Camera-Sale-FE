@@ -6,9 +6,9 @@ import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Col, Layout, Row } from "antd";
 
 import ButtonGroup from "antd/lib/button/button-group";
-import { addCart, delCart } from "../../redux/action";
+import { addCart, delCart } from "../redux/action";
 
-export default function Cart() {
+export function Cart() {
   const state = useSelector((state) => state.handleCart);
   const dispatch = useDispatch();
   const handleAdd = (item) => {

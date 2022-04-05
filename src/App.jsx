@@ -1,16 +1,17 @@
 import "./App.css";
 import "react-loading-skeleton/dist/skeleton.css";
-import { Navbar } from "./components/Navbar";
-import { About } from "./components/pages/about";
-import { Home } from "./components/pages/index";
-import Products from "./components/pages/products";
-import Product from "./components/pages/product";
+import {Navbar} from "./components/Navbar/index";
+// import { Home, Products, About, Product, Cart } from "./pages";
+import { Home } from "./pages/home";
+import { Products } from "./pages/products";
+import { About } from "./pages/about";
+import { Product } from "./pages/product";
+import { Cart } from "./pages/cart";
 import {
   BrowserRouter as Router,
   Routes as Switch,
   Route,
 } from "react-router-dom";
-import Cart from "./components/pages/cart";
 
 function App() {
   return (
