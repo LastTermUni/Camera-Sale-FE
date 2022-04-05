@@ -11,6 +11,8 @@ import {
   Route,
 } from "react-router-dom";
 import Cart from "./components/pages/cart";
+import Login from "./components/pages/login";
+import Register from "./components/pages/register";
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
         <Route path="/thong-tin" element={<About />} />
         <Route path="/san-pham/:id" element={<Product />} />
         <Route path="/gio-hang" element={<Cart />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Switch>
     </Router>
   );

@@ -24,7 +24,6 @@ export const Navbar = () => {
   };
   //
 
-  
   return (
     <>
       <Layout>
@@ -53,22 +52,24 @@ export const Navbar = () => {
             <Col span="4">
               <Space>
                 <NavLink to={"/gio-hang"}>
-                <Button
-                  type="link"
-                  shape="round"
-                  icon={<ShoppingCartOutlined />}
-                  size={30}
-                  style={{ color: "white", fontSize: "18px" }}
+                  <Button
+                    type="link"
+                    shape="round"
+                    icon={<ShoppingCartOutlined />}
+                    size={30}
+                    style={{ color: "white", fontSize: "18px" }}
                   >
-                  Giỏ hàng ({state.length})
-                </Button>
-                  </NavLink>
-                <Button
-                  type="dashed"
-                  shape="circle"
-                  icon={<UserOutlined />}
-                  size={30}
-                />
+                    Giỏ hàng ({state.length})
+                  </Button>
+                </NavLink>
+                <NavLink to={"/login"}>
+                  <Button
+                    type="dashed"
+                    shape="circle"
+                    icon={<UserOutlined />}
+                    size={30}
+                  />
+                </NavLink>
               </Space>
             </Col>
           </Row>

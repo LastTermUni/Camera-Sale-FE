@@ -35,6 +35,7 @@
   position: fixed;
   top: 0;
 }
+
 /* list product */
 .btnCart {
   border: none;
@@ -162,4 +163,44 @@
 
 .item-cart-price>a {
   color: #010427;
+}
+
+.login-form {
+  max-width: 300px;
+  margin: auto !important;
+}
+
+.login-form-forgot {
+  float: right;
+}
+
+.ant-col-rtl .login-form-forgot {
+  float: left;
+}
+
+.login-form-button {
+  width: 100%;
+  margin-bottom: 10px;
+}
+.register-form-button {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.box-login {
+  background: white;
+  height: 400px;
+  width: 400px;
+  padding: 50px 50px 0px;
+  box-shadow: 3px 3px 20px 2px #3907074f;
+  border-radius: 3px;
+}
+
+.box-register {
+  background: white;
+  height: 600px;
+  width: 600px;
+  padding: 50px 50px 0px;
+  box-shadow: 3px 3px 20px 2px #3907074f;
+  border-radius: 3px;
 }
