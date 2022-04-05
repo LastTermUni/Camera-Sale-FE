@@ -1,11 +1,11 @@
 import { Col, Layout, Row, Button } from "antd";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addCart } from "../../redux/action";
+import { addCart } from "../redux/action";
 import Skeleton from "react-loading-skeleton";
 import { useParams } from "react-router-dom";
 
-export default function Product() {
+export function Product() {
   const { id } = useParams();
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(false);

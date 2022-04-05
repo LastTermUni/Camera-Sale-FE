@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import { Layout, Menu, Col, Row, Button, Space } from "antd";
 import { ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
-import mainLogo from "../../CameraStore.png";
 import { NavLink } from "react-router-dom";
 const { Header } = Layout;
 
 export const Navbar = () => {
+
   const state = useSelector((state) => state.handleCart);
   //sticky navgation
   useEffect(() => {
@@ -22,8 +22,9 @@ export const Navbar = () => {
       ? header.classList.add("is-sticky")
       : header.classList.remove("is-sticky");
   };
-  //
-
+  
+  
+  
   return (
     <>
       <Layout>
@@ -31,7 +32,7 @@ export const Navbar = () => {
           <Row>
             <Col span={2} offset={2}>
               <NavLink to="/">
-                <img className="logo" src={mainLogo} alt="logo"></img>
+                <img className="logo" src={"../../../public/CameraStore.png"} alt="logo"></img>
               </NavLink>
             </Col>
             <Col span={14} offset={2}>

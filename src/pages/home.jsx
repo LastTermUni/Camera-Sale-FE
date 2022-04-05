@@ -1,31 +1,39 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
-import { Button, Card, Col, Layout, Row } from "antd";
 import React, { useEffect, useState } from "react";
+import { Layout, Carousel, Divider, Row, Col, Card, Button } from "antd";
+import images from "../components/api/image";
+import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { addCart } from "../redux/action";
 import Skeleton from "react-loading-skeleton";
-import { useDispatch } from "react-redux";
-import { addCart } from "../../redux/action";
-import NumberFormat from "react-number-format";
 
-export default function Products() {
+const { Content } = Layout;
+
+const bannerStyle = {
+  width: "fit-content",
+  height: "300px",
+  margin: "0 auto",
+};
+export function Home() {
   const [data, setData] = useState([]);
-  const [dataCate, setDataCate] = useState([]);
   const [filter, setFilter] = useState(data);
   const [loading, setLoading] = useState(false);
   let componentMounted = true;
 
+  const dispatch = useDispatch();
+  const addProduct = (product) => {
+    dispatch(addCart(product));
+  };
+
   useEffect(() => {
     const getProducts = async () => {
       setLoading(true);
-      const response = await fetch("https://fakestoreapi.com/products");
-      const responses = await fetch(
-        "https://fakestoreapi.com/products/categories"
+      const response = await fetch(
+        "https://fakestoreapi.com/products?limit=10"
       );
-
       if (componentMounted) {
         setData(await response.clone().json());
-        setDataCate(await responses.json());
         setFilter(await response.json());
         setLoading(false);
       }
@@ -35,10 +43,7 @@ export default function Products() {
     };
     getProducts();
   }, []);
-  const dispatch = useDispatch();
-  const addProduct = (product) => {
-    dispatch(addCart(product));
-  };
+
   const Loading = () => {
     return (
       <>
@@ -64,39 +69,9 @@ export default function Products() {
       </>
     );
   };
-
-  const FilterProducts = (cate) => {
-    const updateProducts = data.filter((x) => x.category === cate);
-    setFilter(updateProducts);
-  };
-
   const ShowProducts = () => {
     return (
       <>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "20px",
-          }}
-        >
-          <Button style={{ margin: "0 5px" }} onClick={() => setFilter(data)}>
-            Tất cả
-          </Button>
-          {dataCate.map((cate, index) => {
-            return (
-              <div key={index}>
-                <Button
-                  style={{ margin: "0 5px" }}
-                  onClick={() => FilterProducts(cate)}
-                >
-                  {cate}
-                </Button>
-              </div>
-            );
-          })}
-        </div>
-
         <Row gutters={16} style={{ justifyContent: "center" }}>
           {filter.map((product) => {
             return (
@@ -125,19 +100,10 @@ export default function Products() {
                           src={product.image}
                           alt={product.title}
                         />
-
                         <div>
                           <div className="titleProduct">{product.title}</div>
-                          <NumberFormat
-                            value={product.price.toFixed(0)}
-                            className="priceProduct"
-                            thousandSeparator={true}
-                            displayType={"text"}
-                            renderText={(value, props) => (
-                              <div {...props}>{value} VNĐ</div>
-                            )}
-                          />
-                        
+
+                          <div className="priceProduct"> {product.price}</div>
                         </div>
                       </NavLink>
                     </div>
@@ -161,11 +127,27 @@ export default function Products() {
   };
   return (
     <>
-      <Layout style={{ background: "white" }}>
-        <div style={{ margin: "0 auto" }}>
-          {loading ? <Loading /> : <ShowProducts />}
-        </div>
+      <Layout>
+        <Content>
+          <Carousel effect="fade" autoplay>
+            {images.map(({ src }) => {
+              return (
+                <div key={src}>
+                  <div>
+                    <div style={{ background: "black" }}>
+                      <img style={bannerStyle} src={src} alt="banner" />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </Carousel>
+          <Divider orientation="center">Sản phẩm mới nhất</Divider>
+          <Row gutters={20}>
+            {loading ? <Loading/>: <ShowProducts />}
+          </Row>
+        </Content>
       </Layout>
     </>
   );
-}
+};
