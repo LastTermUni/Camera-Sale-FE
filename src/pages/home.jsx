@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Layout, Carousel, Divider, Row, Col, Card, Button } from "antd";
-import images from "../components/api/image";
+import images from "../api/image";
 import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { addCart } from "../redux/action";
 import Skeleton from "react-loading-skeleton";
+import NumberFormat from "react-number-format";
 
 const { Content } = Layout;
 
@@ -79,15 +80,14 @@ export function Home() {
                 <Col span={5} style={{ margin: "10px" }}>
                   <Card
                     hoverable
-                    style={{ width: 240 }}
                     loading={loading}
                     bodyStyle={{
                       width: 240,
                       height: 380,
                       padding: 0,
-                      border: "1px solid #a7a5a5",
                       borderRadius: "3px",
                     }}
+                    className="box-card-list"
                   >
                     <div style={{ height: "320px" }}>
                       <NavLink to={`/san-pham/${product.id}`}>
@@ -102,12 +102,19 @@ export function Home() {
                         />
                         <div>
                           <div className="titleProduct">{product.title}</div>
-
-                          <div className="priceProduct"> {product.price}</div>
+                          <NumberFormat
+                            value={product.price.toFixed(0)}
+                            className="priceProduct"
+                            thousandSeparator={true}
+                            displayType={"text"}
+                            renderText={(value, props) => (
+                              <div {...props}>{value} VNĐ</div>
+                            )}
+                          />
                         </div>
                       </NavLink>
                     </div>
-                    <div style={{ margin: "10px", border: "1px solid black" }}>
+                    <div style={{ textAlign: "center" }}>
                       <Button
                         onClick={() => addProduct(product)}
                         className="btnCart"
@@ -143,11 +150,9 @@ export function Home() {
             })}
           </Carousel>
           <Divider orientation="center">Sản phẩm mới nhất</Divider>
-          <Row gutters={20}>
-            {loading ? <Loading/>: <ShowProducts />}
-          </Row>
+          <Row gutters={20}>{loading ? <Loading /> : <ShowProducts />}</Row>
         </Content>
       </Layout>
     </>
   );
-};
+}
