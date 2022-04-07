@@ -2,8 +2,13 @@ import React from "react";
 import { Button, Checkbox, Col, Form, Input, Layout, Row } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import * as actions from "../redux/action";
 
-export default function Login() {
+export function Login() {
+  const dispatch = useDispatch();
+  dispatch(actions.getCustomer.getCustomerRequest());
+
   return (
     <>
       <Layout style={{ height: "100vh", margin: "auto" }}>
@@ -64,9 +69,7 @@ export default function Login() {
                 </Button>
                 <div style={{ float: "right" }}>
                   Hoặc
-                  <NavLink to={"/register"}>
-                    <a> Đăng ký!</a>
-                  </NavLink>
+                  <NavLink to="/register"> Đăng ký!</NavLink>
                 </div>
               </Form.Item>
             </Form>

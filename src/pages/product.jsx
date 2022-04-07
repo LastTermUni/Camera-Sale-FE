@@ -1,4 +1,5 @@
 import { Col, Layout, Row, Button } from "antd";
+import NumberFormat from "react-number-format";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addCart } from "../redux/action";
@@ -99,7 +100,14 @@ export function Product() {
               <div className="description-product-detail">
                 {product.description}
               </div>
-              <div className="price-product-detail">{product.price} VNĐ</div>
+
+              <NumberFormat
+                value={product.price}
+                className="price-product-detail"
+                thousandSeparator={true}
+                displayType={"text"}
+                renderText={(value, props) => <div {...props}>{value} VNĐ</div>}
+              />
               <Button
                 className="btnAdd-product-detail"
                 onClick={() => addProduct(product)}

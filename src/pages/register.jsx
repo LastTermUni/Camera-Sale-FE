@@ -43,7 +43,7 @@ const tailFormItemLayout = {
     },
   },
 };
-export default function Register() {
+export function Register() {
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
       <Select style={{ width: 70 }}>
@@ -175,9 +175,7 @@ export default function Register() {
                 </Button>
                 <div style={{ float: "right" }}>
                   Đã có tài khoản?
-                  <NavLink to={"/login"}>
-                    <a> Đăng nhập!</a>
-                  </NavLink>
+                  <NavLink to="/login"> Đăng nhập!</NavLink>
                 </div>
               </Form.Item>
             </Form>
