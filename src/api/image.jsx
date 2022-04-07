@@ -1,2 +1,2 @@
-const images = [{ src: "/banner/bg-1.jpg" }, { src: "/banner/bg-2.png" }];
+const images = [{ src: "public/banner/bg-1.jpg" }, { src: "../public/banner/bg-2.png" }];
 export default images;

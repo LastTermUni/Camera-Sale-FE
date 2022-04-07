@@ -52,7 +52,9 @@ export function Register() {
     </Form.Item>
   );
   const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+    values.preventDefault();
+    let data = values.target.value;
+    console.log("Received values of form: ", data);
   };
 
   const [form] = Form.useForm();
@@ -85,6 +87,7 @@ export function Register() {
             >
               <Form.Item
                 name="email"
+                value=""
                 label="E-mail"
                 rules={[
                   {
@@ -115,6 +118,7 @@ export function Register() {
               <Form.Item
                 name="confirm"
                 label="Xác nhận mật khẩu"
+                value=""
                 dependencies={["password"]}
                 hasFeedback
                 rules={[
@@ -140,6 +144,7 @@ export function Register() {
               <Form.Item
                 name="nickname"
                 label="Tên"
+                value=""
                 tooltip="Chúng tôi sẽ gọi bạn bằng ?"
                 rules={[
                   {
@@ -153,6 +158,7 @@ export function Register() {
               </Form.Item>
               <Form.Item
                 name="phone"
+                value=""
                 label="Số điện thoại"
                 rules={[{ required: true, message: "Hãy nhập số điện thoại!" }]}
               >

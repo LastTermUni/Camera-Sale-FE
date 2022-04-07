@@ -1,11 +1,27 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Button, Checkbox, Col, Form, Input, Layout, Row } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import * as actions from "../redux/action";
+import axios from "axios";
 
 export function Login() {
+
+  const username = useRef("username");
+  const password = useRef("password");
+
+  function handleSubmit(e) {
+    // e.preventDefault();
+    let user = username.current;
+    let pass = password.current
+    axios.post("http://localhost:5000/user/login", { user, pass }).then(() => {
+      console.log("successs");
+    }).catch((err) => {
+      console.log(err)
+    })
+  };
+
   const dispatch = useDispatch();
   dispatch(actions.getCustomer.getCustomerRequest());
 
@@ -37,6 +53,7 @@ export function Login() {
                 <Input
                   prefix={<UserOutlined className="site-form-item-icon" />}
                   placeholder="Tài khoản"
+                  ref={username}
                 />
               </Form.Item>
               <Form.Item
@@ -47,6 +64,7 @@ export function Login() {
                   prefix={<LockOutlined className="site-form-item-icon" />}
                   type="password"
                   placeholder="Mật khẩu"
+                  ref={password}
                 />
               </Form.Item>
               <Form.Item>
@@ -64,6 +82,7 @@ export function Login() {
                   type="primary"
                   htmlType="submit"
                   className="login-form-button"
+                  onSubmit={handleSubmit()}
                 >
                   Đăng nhập
                 </Button>

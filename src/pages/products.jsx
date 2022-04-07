@@ -9,6 +9,8 @@ import { addCart, hideModal, showModal } from "../redux/action";
 import NumberFormat from "react-number-format";
 import { CreateProdModal } from "../components/Product/ProdModal";
 import { modalState$ } from "../redux/selectors";
+import axios from "axios";
+import * as api from '../api'
 
 export function Products() {
   const [data, setData] = useState([]);
@@ -21,10 +23,8 @@ export function Products() {
   useEffect(() => {
     const getProducts = async () => {
       setLoading(true);
-      const response = await fetch("https://fakestoreapi.com/products");
-      const responses = await fetch(
-        "https://fakestoreapi.com/products/categories"
-      );
+      const response = await api.fetchProducts();
+      const responses = await axios.get("http://localhost:5000/product/category", {});
 
       if (componentMounted) {
         setData(await response.clone().json());
