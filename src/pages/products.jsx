@@ -18,9 +18,10 @@ export function Products() {
   useEffect(() => {
     const getProducts = async () => {
       setLoading(true);
-      const response = await fetch("https://fakestoreapi.com/products");
+      // const response = await fetch("https://fakestoreapi.com/products");
+      const response = await fetch("http://localhost:5000/product");
       const responses = await fetch(
-        "https://fakestoreapi.com/products/categories"
+        "http://localhost:5000/products/categories"
       );
 
       if (componentMounted) {
