@@ -14,6 +14,9 @@ import {
   productsState$,
 } from "../redux/selectors";
 import * as actions from "../redux/action";
+import axios from "axios";
+import * as api from '../api'
+
 
 export function Products() {
   const [data, setData] = useState([]);
@@ -36,6 +39,8 @@ export function Products() {
     dispatch(actions.getProducts.getProductsRequest());
     // const getProducts = async () => {
     //   setLoading(true);
+    const response = await api.fetchProducts();
+      const responses = await axios.get("http://localhost:5000/product/category", {});
     //   if (componentMounted) {
     //     setFilter(await products);
     //     setLoading(false);

@@ -8,6 +8,9 @@ import { NavLink, useParams } from "react-router-dom";
 import * as actions from "../redux/action";
 import { productsState$, productDetailState$ } from "../redux/selectors";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import * as api from '../api'
+
 
 export function Product() {
   const id = useParams();
@@ -40,6 +43,7 @@ export function Product() {
 
   //data product
   const product = useSelector(productDetailState$);
+
 
   //anim loading
   const Loading = () => {

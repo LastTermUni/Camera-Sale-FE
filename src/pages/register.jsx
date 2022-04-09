@@ -44,6 +44,7 @@ const tailFormItemLayout = {
   },
 };
 export function Register() {
+
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
       <Select style={{ width: 70 }}>
@@ -52,7 +53,13 @@ export function Register() {
     </Form.Item>
   );
   const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+    let data = values;
+    console.log("Received values of form: ", data);
+    axios.post("http://localhost:5000/user/register", { user, pass }).then(() => {
+      console.log("successs");
+    }).catch((err) => {
+      console.log(err)
+    })
   };
 
   const [form] = Form.useForm();
@@ -85,6 +92,7 @@ export function Register() {
             >
               <Form.Item
                 name="email"
+                value=""
                 label="E-mail"
                 rules={[
                   {
@@ -115,6 +123,7 @@ export function Register() {
               <Form.Item
                 name="confirm"
                 label="Xác nhận mật khẩu"
+                value=""
                 dependencies={["password"]}
                 hasFeedback
                 rules={[
@@ -140,6 +149,7 @@ export function Register() {
               <Form.Item
                 name="nickname"
                 label="Tên"
+                value=""
                 tooltip="Chúng tôi sẽ gọi bạn bằng ?"
                 rules={[
                   {
@@ -153,6 +163,7 @@ export function Register() {
               </Form.Item>
               <Form.Item
                 name="phone"
+                value=""
                 label="Số điện thoại"
                 rules={[{ required: true, message: "Hãy nhập số điện thoại!" }]}
               >

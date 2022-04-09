@@ -7,3 +7,4 @@ export const fetchProductDetail = (id) => axios.get(`${URL}/product/${id}`);
 export const createProduct = (payload) => axios.post(`${URL}/product`, payload);
 export const updateProduct = (payload) => axios.put(`${URL}/product/update/${payload._id}`,payload);
 export const deleteProduct = (id) => axios.delete(`${URL}/product/${id}`);
+
