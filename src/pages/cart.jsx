@@ -52,20 +52,20 @@ export function Cart() {
                   height: "200px",
                   objectFit: "contain",
                 }}
-                src={product.image}
-                alt={product.title}
+                src={product.prodPicture}
+                alt={product.prodName}
               />
             </div>
           </Col>
           <Col span={10} style={{width:"700px", alignSelf: "center", textAlign: "center" }}>
-            <div className="item-cart-title">{product.title}</div>
+            <div className="item-cart-title">{product.prodName}</div>
             <div className="item-cart-category">
               <a>Loại: </a>
-              {product.category}
+              {product.prodCate}
             </div>
 
             <NumberFormat
-              value={(product.price).toFixed(0) }
+              value={(product.prodPrice) }
               className="item-cart-price"
               thousandSeparator={true}
               displayType={"text"}
@@ -89,7 +89,7 @@ export function Cart() {
               </Button>
             </ButtonGroup>
             <NumberFormat
-              value={(product.qty * product.price).toFixed(0)}
+              value={(product.qty * product.prodPrice)}
               className="item-cart-sump"
               thousandSeparator={true}
               displayType={"text"}
@@ -109,7 +109,7 @@ export function Cart() {
   const [sumPrice, setSumPrice] = useState(0);
 
   useEffect(() => {
-    setSumPrice(state.reduce((a, v) => (a = a + v.qty * v.price), 0));
+    setSumPrice(state.reduce((a, v) => (a = a + v.qty * v.prodPrice), 0));
   }, [state]);
 
   const buttons = () => {
@@ -119,7 +119,7 @@ export function Cart() {
           <Col span={5} style={{ marginLeft: "auto" }}>
             <div style={{fontSize:"25px"}}>Tổng tiền:</div>
             <NumberFormat
-              value={sumPrice.toFixed(0)}
+              value={sumPrice}
               className="item-cart-price"
               thousandSeparator={true}
               displayType={"text"}

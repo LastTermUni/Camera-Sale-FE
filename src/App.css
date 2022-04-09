@@ -82,6 +82,7 @@
   overflow: hidden !important;
   text-overflow: ellipsis !important; 
   display: inline-block !important;
+  width: 100% !important;
   orientation: vertical;
   color: #010427;
 }
