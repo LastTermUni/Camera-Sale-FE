@@ -44,6 +44,7 @@ const tailFormItemLayout = {
   },
 };
 export function Register() {
+
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
       <Select style={{ width: 70 }}>
@@ -52,9 +53,13 @@ export function Register() {
     </Form.Item>
   );
   const onFinish = (values) => {
-    values.preventDefault();
-    let data = values.target.value;
+    let data = values;
     console.log("Received values of form: ", data);
+    axios.post("http://localhost:5000/user/register", { user, pass }).then(() => {
+      console.log("successs");
+    }).catch((err) => {
+      console.log(err)
+    })
   };
 
   const [form] = Form.useForm();
