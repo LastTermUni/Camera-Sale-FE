@@ -1,11 +1,28 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Button, Checkbox, Col, Form, Input, Layout, Row } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import * as actions from "../redux/action";
+import axios from "axios";
+
 
 export function Login() {
+
+  const username = useRef("username");
+  const password = useRef("password");
+  const handleSubmit = (value) => {
+    let user = value.username;
+    let pass = value.password;
+
+    axios.post("http://localhost:5000/user/login", { user, pass }).then(() => {
+      sessionStorage.setItem("login", value);
+      console.log("successs");
+    }).catch((err) => {
+      console.log(err)
+    })
+  };
+
   const dispatch = useDispatch();
   dispatch(actions.getCustomer.getCustomerRequest());
 
@@ -27,6 +44,7 @@ export function Login() {
             </div>
             <Form
               name="normal_login"
+              onFinish={handleSubmit}
               className="login-form"
               initialValues={{ remember: true }}
             >
@@ -37,6 +55,7 @@ export function Login() {
                 <Input
                   prefix={<UserOutlined className="site-form-item-icon" />}
                   placeholder="Tài khoản"
+                  ref={username}
                 />
               </Form.Item>
               <Form.Item
@@ -47,6 +66,7 @@ export function Login() {
                   prefix={<LockOutlined className="site-form-item-icon" />}
                   type="password"
                   placeholder="Mật khẩu"
+                  ref={password}
                 />
               </Form.Item>
               <Form.Item>

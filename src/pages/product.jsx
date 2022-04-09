@@ -5,6 +5,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { addCart } from "../redux/action";
 import Skeleton from "react-loading-skeleton";
 import { useParams } from "react-router-dom";
+import axios from "axios";
+import * as api from '../api'
 
 export function Product() {
   const { id } = useParams();
@@ -19,7 +21,7 @@ export function Product() {
   useEffect(() => {
     const getProduct = async () => {
       setLoading(true);
-      const response = await fetch(`https://fakestoreapi.com/products/${id}`);
+      const response = await api.getProduct(id)
       setProduct(await response.json());
       setLoading(false);
     };
