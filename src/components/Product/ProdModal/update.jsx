@@ -24,9 +24,9 @@ export function UpdateProduct() {
   const id = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [product2, setProduct] = useState([]);
+  const [newImg, setNewImg] = useState([]);
   const [price, setPrice] = useState("");
-  const [img, setImg] = useState();
+  const [img, setImg] = useState([]);
   const updateProd = (product) => {
     dispatch(updateProduct.updateProductRequest(product));
   };
@@ -34,16 +34,12 @@ export function UpdateProduct() {
 
   useEffect(() => {
     dispatch(getProductDetail.getProductDetailRequest(id));
-    // const getProduct = async () => {
-    // setLoading(true);
-
-    // setLoading(false);
-    // };
-    // getProduct();
   }, [dispatch]);
+
   //data product
   //data product
   const UpdateProduct = () => {
+    setImg(product.prodPicture);
     return (
       <div>
         <Form>
@@ -51,27 +47,31 @@ export function UpdateProduct() {
             <Col span={14} style={{ background: "#f7f7f7" }}>
               <div style={{ minHeight: "100vh", padding: "8px" }}>
                 <Row gutter={[8, 8]}>
-                  <Col span={12}>
-                    <div
-                      style={{
-                        height: "400px",
-                        width: "418px",
-                        textAlign: "center",
-                      }}
-                    >
-                      <img
-                        style={{
-                          height: "400px",
-                          width: "418px",
-                          objectFit: "contain",
-                        }}
-                        src={product.prodPicture}
-                        alt={product.prodName}
-                      ></img>
-                    </div>
-                  </Col>
+                  {(img || []).map((e) => (
+                    <>
+                      <Col span={12}>
+                        <div
+                          style={{
+                            height: "400px",
+                            width: "418px",
+                            textAlign: "center",
+                          }}
+                        >
+                          <img
+                            style={{
+                              height: "400px",
+                              width: "418px",
+                              objectFit: "contain",
+                            }}
+                            src={`${e}`}
+                            alt={product.prodName}
+                          ></img>
+                        </div>
+                      </Col>
+                    </>
+                  ))}
 
-                  <img hidden={true} src={img} alt={product.prodName}></img>
+                  <img hidden={true} src="" alt={product.prodName}></img>
                 </Row>
               </div>
             </Col>
@@ -126,13 +126,17 @@ export function UpdateProduct() {
                 />
                 <FileBase64
                   accept="image/*"
-                  multiple={false}
+                  multiple={true}
                   type="file"
                   value={product.prodPicture}
-                  onDone={(base64) => {
+                  onDone={async (base64) => {
                     {
-                      product.prodPicture = base64.base64;
-                      setImg(base64.base64);
+                      await base64.forEach((element) => {
+                        newImg.push(element.base64);
+                      });
+                      product.prodPicture = newImg;
+                      setImg(newImg);
+                      setNewImg([]);
                     }
                   }}
                 />

@@ -8,6 +8,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { addCart } from "../redux/action";
 import Skeleton from "react-loading-skeleton";
 import NumberFormat from "react-number-format";
+import * as actions from "../redux/action";
+import { productsState$ } from "../redux/selectors";
 
 const { Content } = Layout;
 
@@ -26,56 +28,16 @@ export function Home() {
   const addProduct = (product) => {
     dispatch(addCart(product));
   };
-
+  const products = useSelector(productsState$);
   useEffect(() => {
-    const getProducts = async () => {
-      setLoading(true);
-      const response = await fetch(
-        // "https://fakestoreapi.com/products?limit=10"
-        'http://localhost:5000/product'
-      );
-      if (componentMounted) {
-        setData(await response.clone().json());
-        setFilter(await response.json());
-        setLoading(false);
-      }
-      return () => {
-        componentMounted = false;
-      };
-    };
-    getProducts();
+    dispatch(actions.getProducts.getProductsRequest());
   }, []);
 
-  const Loading = () => {
-    return (
-      <>
-        <div style={{ margin: "16px" }}>
-          <Row gutter={[8, 8]} style={{ justifyContent: "center" }}>
-            <Col span={4} style={{ margin: "17px" }}>
-              <Skeleton width={240} height={380} />
-            </Col>
-            <Col span={4} style={{ margin: "17px" }}>
-              <Skeleton width={240} height={380} />
-            </Col>
-            <Col span={4} style={{ margin: "17px" }}>
-              <Skeleton width={240} height={380} />
-            </Col>
-            <Col span={4} style={{ margin: "17px" }}>
-              <Skeleton width={240} height={380} />
-            </Col>
-            <Col span={4} style={{ margin: "17px" }}>
-              <Skeleton width={240} height={380} />
-            </Col>
-          </Row>
-        </div>
-      </>
-    );
-  };
   const ShowProducts = () => {
     return (
       <>
         <Row gutters={16} style={{ justifyContent: "center" }}>
-          {filter.map((product) => {
+          {products.map((product) => {
             return (
               <div key={product.id}>
                 <Col span={5} style={{ margin: "10px" }}>
@@ -91,20 +53,20 @@ export function Home() {
                     className="box-card-list"
                   >
                     <div style={{ height: "320px" }}>
-                      <NavLink to={`/san-pham/${product.id}`}>
+                      <NavLink to={`/san-pham/${product._id}`}>
                         <img
                           style={{
                             width: "100%",
                             height: "240px",
                             padding: "5px",
                           }}
-                          src={product.image}
-                          alt={product.title}
+                          src={product.prodPicture[0]}
+                          alt={product.prodName}
                         />
                         <div>
-                          <div className="titleProduct">{product.title}</div>
+                          <div className="titleProduct">{product.prodName}</div>
                           <NumberFormat
-                            value={product.price.toFixed(0)}
+                            value={product.prodPrice}
                             className="priceProduct"
                             thousandSeparator={true}
                             displayType={"text"}
@@ -151,7 +113,7 @@ export function Home() {
             })}
           </Carousel>
           <Divider orientation="center">Sản phẩm mới nhất</Divider>
-          <Row gutters={20}>{loading ? <Loading /> : <ShowProducts />}</Row>
+          {loading ? <Loading /> : <ShowProducts />}
         </Content>
       </Layout>
     </>

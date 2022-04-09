@@ -52,7 +52,7 @@ export function Cart() {
                   height: "200px",
                   objectFit: "contain",
                 }}
-                src={product.prodPicture}
+                src={product.prodPicture[0]}
                 alt={product.prodName}
               />
             </div>

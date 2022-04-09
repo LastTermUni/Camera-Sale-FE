@@ -9,8 +9,7 @@ import * as actions from "../redux/action";
 import { productsState$, productDetailState$ } from "../redux/selectors";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import * as api from '../api'
-
+import * as api from "../api";
 
 export function Product() {
   const id = useParams();
@@ -18,7 +17,8 @@ export function Product() {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const [img, setImg] = useState([]);
+  const product = useSelector(productDetailState$);
   const addProduct = (product) => {
     dispatch(addCart(product));
   };
@@ -42,9 +42,8 @@ export function Product() {
   }, [dispatch]);
 
   //data product
-  const product = useSelector(productDetailState$);
 
-
+  // console.log(product);
   //anim loading
   const Loading = () => {
     return (
@@ -83,31 +82,36 @@ export function Product() {
     );
   };
   const ShowProduct = () => {
+    setImg(product.prodPicture);
     return (
       <div>
         <Row gutter={[8, 8]}>
           <Col span={14} style={{ background: "#f7f7f7" }}>
             <div style={{ minHeight: "100vh", padding: "8px" }}>
               <Row gutter={[8, 8]}>
-                <Col span={12}>
-                  <div
-                    style={{
-                      height: "400px",
-                      width: "418px",
-                      textAlign: "center",
-                    }}
-                  >
-                    <img
-                      style={{
-                        height: "400px",
-                        width: "418px",
-                        objectFit: "contain",
-                      }}
-                      src={product.prodPicture}
-                      alt={product.prodName}
-                    ></img>
-                  </div>
-                </Col>
+                {(img || []).map((e) => (
+                  <>
+                    <Col span={12}>
+                      <div
+                        style={{
+                          height: "400px",
+                          width: "418px",
+                          textAlign: "center",
+                        }}
+                      >
+                        <img
+                          style={{
+                            height: "400px",
+                            width: "418px",
+                            objectFit: "contain",
+                          }}
+                          src={`${e}`}
+                          alt={product.prodName}
+                        ></img>
+                      </div>
+                    </Col>
+                  </>
+                ))}
               </Row>
             </div>
           </Col>
@@ -137,15 +141,20 @@ export function Product() {
             </div>
             <div>
               <NavLink to={`/san-pham/cap-nhat/${product._id}`}>
-                <Button className="btnAdd-product-detail">
+                <Button
+                  className="btnAdd-product-detail"
+                  style={{ float: "right" }}
+                >
                   Cập nhật sản phẩm
                 </Button>
               </NavLink>
             </div>
+            <div className="clearfix"></div>
             <div>
               <Button
                 className="btnAdd-product-detail"
                 onClick={() => delProduct(product._id)}
+                style={{ float: "right" }}
               >
                 Xóa sản phẩm
               </Button>
