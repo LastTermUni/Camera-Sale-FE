@@ -6,16 +6,17 @@ import { useDispatch } from "react-redux";
 import * as actions from "../redux/action";
 import axios from "axios";
 
+
 export function Login() {
 
   const username = useRef("username");
   const password = useRef("password");
+  const handleSubmit = (value) => {
+    let user = value.username;
+    let pass = value.password;
 
-  function handleSubmit(e) {
-    // e.preventDefault();
-    let user = username.current;
-    let pass = password.current
     axios.post("http://localhost:5000/user/login", { user, pass }).then(() => {
+      sessionStorage.setItem("login", value);
       console.log("successs");
     }).catch((err) => {
       console.log(err)
@@ -43,6 +44,7 @@ export function Login() {
             </div>
             <Form
               name="normal_login"
+              onFinish={handleSubmit}
               className="login-form"
               initialValues={{ remember: true }}
             >
@@ -82,7 +84,6 @@ export function Login() {
                   type="primary"
                   htmlType="submit"
                   className="login-form-button"
-                  onSubmit={handleSubmit()}
                 >
                   Đăng nhập
                 </Button>
