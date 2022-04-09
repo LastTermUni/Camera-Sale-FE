@@ -20,6 +20,7 @@ import { useParams } from "react-router-dom";
 import { createProduct } from "../../../redux/action";
 import { modalState$ } from "../../../redux/selectors";
 import { hideModal } from "../../../redux/action";
+import NumberFormat from "react-number-format";
 
 export function CreateProdModal() {
   const dispatch = useDispatch();
