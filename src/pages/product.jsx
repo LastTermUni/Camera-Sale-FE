@@ -4,30 +4,47 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addCart } from "../redux/action";
 import Skeleton from "react-loading-skeleton";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
+import * as actions from "../redux/action";
+import { productsState$, productDetailState$ } from "../redux/selectors";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import * as api from '../api'
+import * as api from "../api";
 
 export function Product() {
-  const { id } = useParams();
-  const [product, setProduct] = useState([]);
+  const id = useParams();
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [img, setImg] = useState([]);
+  const product = useSelector(productDetailState$);
   const addProduct = (product) => {
     dispatch(addCart(product));
   };
 
-  useEffect(() => {
-    const getProduct = async () => {
-      setLoading(true);
-      const response = await api.getProduct(id)
-      setProduct(await response.json());
-      setLoading(false);
-    };
-    getProduct();
-  }, [id]);
+  const delProduct = React.useCallback(
+    (id) => {
+      dispatch(actions.delProduct.delProductRequest(id));
+      navigate("/san-pham");
+    },
+    [dispatch]
+  );
 
+  useEffect(() => {
+    dispatch(actions.getProductDetail.getProductDetailRequest(id));
+    // const getProduct = async () => {
+    // setLoading(true);
+
+    // setLoading(false);
+    // };
+    // getProduct();
+  }, [dispatch]);
+
+  //data product
+
+  // console.log(product);
+  //anim loading
   const Loading = () => {
     return (
       <>
@@ -65,46 +82,51 @@ export function Product() {
     );
   };
   const ShowProduct = () => {
+    setImg(product.prodPicture);
     return (
       <div>
         <Row gutter={[8, 8]}>
           <Col span={14} style={{ background: "#f7f7f7" }}>
             <div style={{ minHeight: "100vh", padding: "8px" }}>
               <Row gutter={[8, 8]}>
-                <Col span={12}>
-                  <div
-                    style={{
-                      height: "400px",
-                      width: "418px",
-                      textAlign: "center",
-                    }}
-                  >
-                    <img
-                      style={{
-                        height: "400px",
-                        width: "418px",
-                        objectFit: "contain",
-                      }}
-                      src={product.image}
-                      alt={product.title}
-                    ></img>
-                  </div>
-                </Col>
+                {(img || []).map((e) => (
+                  <>
+                    <Col span={12}>
+                      <div
+                        style={{
+                          height: "400px",
+                          width: "418px",
+                          textAlign: "center",
+                        }}
+                      >
+                        <img
+                          style={{
+                            height: "400px",
+                            width: "418px",
+                            objectFit: "contain",
+                          }}
+                          src={`${e}`}
+                          alt={product.prodName}
+                        ></img>
+                      </div>
+                    </Col>
+                  </>
+                ))}
               </Row>
             </div>
           </Col>
           <Col span={10} style={{ background: "white", paddingLeft: "20px" }}>
             <div style={{ padding: "8px" }}>
-              <div className="title-product-detail">{product.title}</div>
+              <div className="title-product-detail">{product.prodName}</div>
               <div className="category-product-detail">
-                Loại: {product.category}
+                Loại: {product.prodCate}
               </div>
               <div className="description-product-detail">
-                {product.description}
+                {product.prodDesc}
               </div>
 
               <NumberFormat
-                value={product.price}
+                value={product.prodPrice}
                 className="price-product-detail"
                 thousandSeparator={true}
                 displayType={"text"}
@@ -115,6 +137,26 @@ export function Product() {
                 onClick={() => addProduct(product)}
               >
                 Thêm vào giỏ hàng
+              </Button>
+            </div>
+            <div>
+              <NavLink to={`/san-pham/cap-nhat/${product._id}`}>
+                <Button
+                  className="btnAdd-product-detail"
+                  style={{ float: "right" }}
+                >
+                  Cập nhật sản phẩm
+                </Button>
+              </NavLink>
+            </div>
+            <div className="clearfix"></div>
+            <div>
+              <Button
+                className="btnAdd-product-detail"
+                onClick={() => delProduct(product._id)}
+                style={{ float: "right" }}
+              >
+                Xóa sản phẩm
               </Button>
             </div>
           </Col>

@@ -5,34 +5,73 @@ import * as api from "../../api";
 
 function* fetchCustomerSaga(action) {
   const customer = yield call(api.fetchCustomer);
-  console.log("[customer]", customer);
   yield put(actions.getCustomer.getCustomerSuccess(customer.data));
 }
-function* fetchProductSaga(action) {
+
+function* fetchProductsSaga(action) {
   try {
-    const product = yield call(api.fetchProducts);
-    console.log("[product]", product);
-    yield put(actions.getProducts.getProductsSuccess(product.data));
+    const products = yield call(api.fetchProducts);
+    yield put(actions.getProducts.getProductsSuccess(products.data));
   } catch (error) {
     console.error(error);
-    yield put(actions.getProducts.getProductsFailure(err));
+    yield put(actions.getProducts.getProductsFailure(error));
+  }
+}
+function* fetchProductDetailSaga(action) {
+  try {
+    const product = yield call(api.fetchProductDetail, action.payload.id);
+    yield put(actions.getProductDetail.getProductDetailSuccess(product.data));
+  } catch (error) {
+    console.error(error);
+    yield put(actions.getProductDetail.getProductDetailFailure(error));
   }
 }
 function* createProductSaga(action) {
   try {
     const product = yield call(api.createProduct, action.payload);
-    console.log("[createProductSaga- product]", product);
     yield put(actions.createProduct.createProductSuccess(product.data));
   } catch (error) {
     console.error(error);
     yield put(actions.createProduct.createProductFailure(error));
   }
 }
+function* updateProductSaga(action) {
+  try {
+    console.log(action);
+    const product = yield call(
+      api.updateProduct,
+      action.payload
+    );
+    // yield put(actions.updateProduct.updateProductSuccess(product.data));
+  } catch (error) {
+    console.error(error);
+    yield put(actions.updateProduct.updateProductFailure(error));
+  }
+}
+function* deleteProductSaga(action) {
+  try {
+    yield call(api.deleteProduct, action.payload);
+  } catch (error) {
+    console.error(error);
+    yield put(actions.delProduct.delProductFailure(error));
+  }
+}
+
 function* mySaga() {
   yield takeLatest(actions.getCustomer.getCustomerRequest, fetchCustomerSaga);
+  yield takeLatest(
+    actions.getProductDetail.getProductDetailRequest,
+    fetchProductDetailSaga
+  );
+  yield takeLatest(actions.getProducts.getProductsRequest, fetchProductsSaga);
   yield takeLatest(
     actions.createProduct.createProductRequest,
     createProductSaga
   );
+  yield takeLatest(
+    actions.updateProduct.updateProductRequest,
+    updateProductSaga
+  );
+  yield takeLatest(actions.delProduct.delProductRequest, deleteProductSaga);
 }
 export default mySaga;

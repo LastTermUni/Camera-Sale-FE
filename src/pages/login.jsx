@@ -2,8 +2,9 @@ import React, { useRef } from "react";
 import { Button, Checkbox, Col, Form, Input, Layout, Row } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { NavLink } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../redux/action";
+
 import axios from "axios";
 
 
@@ -23,8 +24,7 @@ export function Login() {
     })
   };
 
-  const dispatch = useDispatch();
-  dispatch(actions.getCustomer.getCustomerRequest());
+
 
   return (
     <>

@@ -6,18 +6,17 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 
-
-
 ReactDOM.render(
   <React.StrictMode>
-    <HelmetProvider>
-      <Helmet>
-        <title>Hyper Camera</title>
-      </Helmet>
-      <Provider store={store}>
+    <Provider store={store}>
+      <HelmetProvider>
+        <Helmet>
+          <title>Hyper Camera</title>
+        </Helmet>
+
         <App />
-      </Provider>
-    </HelmetProvider>
+      </HelmetProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );

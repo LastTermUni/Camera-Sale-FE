@@ -7,37 +7,24 @@ import Skeleton from "react-loading-skeleton";
 import { useDispatch, useSelector } from "react-redux";
 import { addCart, hideModal, showModal } from "../redux/action";
 import NumberFormat from "react-number-format";
-import { CreateProdModal } from "../components/Product/ProdModal";
-import { modalState$ } from "../redux/selectors";
+import { CreateProdModal } from "../components/Product/ProdModal/add";
+import {
+  modalState$,
+  productDetailState$,
+  productsState$,
+} from "../redux/selectors";
+import * as actions from "../redux/action";
 import axios from "axios";
-import * as api from '../api'
+import * as api from "../api";
 
 export function Products() {
   const [data, setData] = useState([]);
-  const [dataCate, setDataCate] = useState([]);
-  const [filter, setFilter] = useState(data);
+  const [filter, setFilter] = useState([]);
   const [loading, setLoading] = useState(false);
-  let componentMounted = true;
+  const products = useSelector(productsState$);
+
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const getProducts = async () => {
-      setLoading(true);
-      const response = await api.fetchProducts();
-      const responses = await axios.get("http://localhost:5000/product/category", {});
-
-      if (componentMounted) {
-        setData(await response.clone().json());
-        setDataCate(await responses.json());
-        setFilter(await response.json());
-        setLoading(false);
-      }
-      return () => {
-        componentMounted = false;
-      };
-    };
-    getProducts();
-  }, []);
   //add prod to cart
   const addProduct = (product) => {
     dispatch(addCart(product));
@@ -47,12 +34,27 @@ export function Products() {
     dispatch(showModal());
   }, [dispatch]);
 
+  useEffect(() => {
+    dispatch(actions.getProducts.getProductsRequest());
+    // const getProducts = async () => {
+    //   setLoading(true);
+    // const response = await api.fetchProducts();
+    //   const responses = await axios.get("http://localhost:5000/product/category", {});
+    //   if (componentMounted) {
+    //     setFilter(await products);
+    //     setLoading(false);
+    //     console.log(products);
+    //   }
+    //   return () => {
+    //     componentMounted = false;
+    //   };
+    // };
+    // getProducts();
+  }, [dispatch]);
+
   const onClose = React.useCallback(() => {
     dispatch(hideModal());
   }, [dispatch]);
-
-  const { isShow } = useSelector(modalState$);
-  console.log(isShow);
   const Loading = () => {
     return (
       <>
@@ -79,10 +81,10 @@ export function Products() {
     );
   };
 
-  const FilterProducts = (cate) => {
-    const updateProducts = data.filter((x) => x.category === cate);
-    setFilter(updateProducts);
-  };
+  // const FilterProducts = (cate) => {
+  //   const updateProducts = data.filter((x) => x.category === cate);
+  //   setFilter(updateProducts);
+  // };
 
   const ShowProducts = () => {
     return (
@@ -94,10 +96,13 @@ export function Products() {
             marginTop: "20px",
           }}
         >
-          <Button style={{ margin: "0 5px" }} onClick={() => setFilter(data)}>
+          <Button
+            style={{ margin: "0 5px" }}
+            onClick={() => setFilter(products)}
+          >
             Tất cả
           </Button>
-          {dataCate.map((cate, index) => {
+          {/* {dataCate.map((cate, index) => {
             return (
               <div key={index}>
                 <Button
@@ -108,13 +113,13 @@ export function Products() {
                 </Button>
               </div>
             );
-          })}
+          })} */}
         </div>
 
         <Row gutters={16} style={{ justifyContent: "center" }}>
-          {filter.map((product) => {
+          {products.map((product) => {
             return (
-              <div key={product.id}>
+              <div key={product._id}>
                 <Col span={5} style={{ margin: "10px" }}>
                   <Card
                     hoverable
@@ -129,21 +134,21 @@ export function Products() {
                     }}
                   >
                     <div style={{ height: "320px" }}>
-                      <NavLink to={`/san-pham/${product.id}`}>
+                      <NavLink to={`/san-pham/${product._id}`}>
                         <img
                           style={{
                             width: "100%",
                             height: "240px",
                             padding: "5px",
                           }}
-                          src={product.image}
-                          alt={product.title}
+                          src={product.prodPicture[0]}
+                          alt={product.prodName}
                         />
 
                         <div>
-                          <div className="titleProduct">{product.title}</div>
+                          <div className="titleProduct">{product.prodName}</div>
                           <NumberFormat
-                            value={product.price.toFixed(0)}
+                            value={product.prodPrice}
                             className="priceProduct"
                             thousandSeparator={true}
                             displayType={"text"}
@@ -175,18 +180,15 @@ export function Products() {
   return (
     <>
       <Layout style={{ background: "white" }}>
+        <Button
+          onClick={() => openCreateProdModal()}
+          style={{ marginLeft: "84%" }}
+        >
+          Thêm sản phẩm
+        </Button>
+
+        <CreateProdModal />
         <div style={{ margin: "0 auto" }}>
-          <Button
-            onClick={() => openCreateProdModal()}
-            style={{ marginLeft: "84%" }}
-          >
-            Thêm sản phẩm
-          </Button>
-          <Modal visible={isShow} onCancel={onClose} footer={false}>
-            <div>
-              <CreateProdModal />
-            </div>
-          </Modal>
           {loading ? <Loading /> : <ShowProducts />}
         </div>
       </Layout>

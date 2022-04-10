@@ -19,53 +19,49 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { createProduct } from "../../../redux/action";
 import { modalState$ } from "../../../redux/selectors";
+import { hideModal } from "../../../redux/action";
+import NumberFormat from "react-number-format";
 
 export function CreateProdModal() {
   const dispatch = useDispatch();
   const [data, setData] = useState({
     prodName: "",
     prodPrice: "",
-    prodPicture: "",
+    prodPicture: [],
     prodCate: "",
     prodDesc: "",
   });
+  const { isShow } = useSelector(modalState$);
+  const [img, setImg] = useState([]);
 
   const onSubmit = React.useCallback(async () => {
     console.log({ data });
+    setData({ ...data, prodPicture: img });
     dispatch(createProduct.createProductRequest(data));
+    onClose();
   }, [data, dispatch]);
-
-  function formatNumber(value) {
-    value += "";
-    const list = value.split(".");
-    const prefix = list[0].charAt(0) === "-" ? "-" : "";
-    let num = prefix ? list[0].slice(1) : list[0];
-    let result = "";
-    while (num.length > 3) {
-      result = `,${num.slice(-3)}${result}`;
-      num = num.slice(0, num.length - 3);
-    }
-    if (num) {
-      result = num + result;
-    }
-    return `${prefix}${result}${list[1] ? `.${list[1]}` : ""}`;
-  }
-  //for image
-  function getBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
+  const onClose = React.useCallback(() => {
+    dispatch(hideModal());
+    setData({
+      prodName: "",
+      prodPrice: "",
+      prodPicture: [],
+      prodCate: "",
+      prodDesc: "",
     });
-  }
+  }, [dispatch]);
 
   const CreateProd = (
     <div>
       <Form>
         <Row gutter={[8, 8]}>
           <Col span={10} style={{ background: "#f7f7f7" }}>
-            <div style={{ minHeight: "fit-content", padding: "8px" }}></div>
+            <div style={{ minHeight: "fit-content", padding: "8px" }}>
+              {img.map((e) => {
+                return <img src={`${e}`} alt="Picture" />;
+              })}
+            </div>
+            <img src="" alt="Picture" />
           </Col>
           <Col span={14} style={{ background: "white", paddingLeft: "20px" }}>
             <div style={{ padding: "8px" }}>
@@ -103,6 +99,15 @@ export function CreateProdModal() {
                 />
               </Form.Item>
               <Form.Item style={{ margin: "10px" }}>
+                <NumberFormat
+                  value={data.prodPrice}
+                  className=""
+                  thousandSeparator={true}
+                  displayType={"text"}
+                  renderText={(value, props) => (
+                    <div {...props}>{value} VNĐ</div>
+                  )}
+                />
                 <Input
                   value={data.prodPrice}
                   onChange={(e) =>
@@ -114,11 +119,14 @@ export function CreateProdModal() {
               <Form.Item style={{ margin: "10px" }}>
                 <FileBase64
                   accept="image/*"
-                  multiple={false}
+                  multiple={true}
                   type="file"
                   value={data.prodPicture}
-                  onDone={(base64) => {
-                    setData({ ...data, prodPicture: base64.base64 });
+                  onDone={async (base64) => {
+                    await base64.forEach((element) => {
+                      img.push(element.base64);
+                    });
+                    setData({ ...data, prodPicture: img });
                   }}
                 />
               </Form.Item>
@@ -142,9 +150,13 @@ export function CreateProdModal() {
   return (
     <>
       <div>
-        <Layout style={{ paddingTop: "20px", background: "rgb(247 247 247)" }}>
-          {CreateProd}
-        </Layout>
+        <Modal visible={isShow} onCancel={onClose} footer={false}>
+          <Layout
+            style={{ paddingTop: "20px", background: "rgb(247 247 247)" }}
+          >
+            <div>{CreateProd}</div>
+          </Layout>
+        </Modal>
       </div>
     </>
   );

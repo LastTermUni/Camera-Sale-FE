@@ -80,8 +80,9 @@
   font-weight: bold !important;
   font-size: 16px !important;
   overflow: hidden !important;
-  text-overflow: ellipsis !important; 
+  text-overflow: ellipsis !important;
   display: inline-block !important;
+  width: 100% !important;
   orientation: vertical;
   color: #010427;
 }
@@ -231,10 +232,18 @@
   box-shadow: 3px 3px 20px 2px #3907074f;
   border-radius: 3px;
 }
-.ant-modal{
+
+.ant-modal {
   width: fit-content !important;
 }
-.ant-upload-list-picture-card-container{
+
+.ant-upload-list-picture-card-container {
   width: 230px !important;
   height: 230px !important;
+}
+
+.clearfix {
+  content: "";
+  clear: both;
+  display: table;
 }
