@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Layout, Menu, Col, Row, Button, Space, Dropdown, message } from "antd";
 import {
   LogoutOutlined,
+  SettingFilled,
   ShoppingCartOutlined,
   SmileFilled,
   UserOutlined,
@@ -39,13 +40,13 @@ export const Navbar = () => {
   };
   function handleMenuClick(e) {
     if (e.key == 1) {
-      cookies.remove("Login", { path: "/"});
+      cookies.remove("Login", { path: "/" });
       setUser(false);
     }
   }
   const menu = (
     <Menu onClick={handleMenuClick}>
-      <Menu.Item key="2" icon={<LogoutOutlined />}>
+      <Menu.Item key="2" icon={<SettingFilled />}>
         setting
       </Menu.Item>
       <Menu.Item key="1" icon={<LogoutOutlined />}>

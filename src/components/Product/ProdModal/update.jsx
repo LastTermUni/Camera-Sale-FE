@@ -29,6 +29,7 @@ export function UpdateProduct() {
   const [img, setImg] = useState([]);
 
   const [disable, setDisable] = React.useState(false);
+  const product = useSelector(productDetailState$);
   const updateProd = (product) => {
     setDisable(true);
     dispatch(updateProduct.updateProductRequest(product));
@@ -38,7 +39,7 @@ export function UpdateProduct() {
     }
     delays();
   };
-  const product = useSelector(productDetailState$);
+  
   function timeout(delay) {
     return new Promise((res) => setTimeout(res, delay));
   }

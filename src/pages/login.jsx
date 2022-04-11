@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Button, Checkbox, Col, Form, Input, Layout, Row } from "antd";
+import { Button, Checkbox, Col, Form, Input, Layout, message, Row } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +15,7 @@ export function Login() {
     username: "",
     password: "",
   });
+  const [disable, setDisable] = useState(false);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser({
@@ -22,10 +23,13 @@ export function Login() {
       [name]: value,
     });
   };
+
   const handleSubmit = (value) => {
     axios
       .post("http://localhost:5000/user/login", user)
-      .then(() => {
+      .then(async (response) => {
+        setDisable(true);
+        await message.success("Đăng nhập thành công!");
         cookies.set("Login", user, { path: "/" });
         let cookLogin = cookies.get("Login");
         console.log("Login success" + "with userName: " + cookLogin.username);
@@ -33,7 +37,8 @@ export function Login() {
         window.location.reload();
       })
       .catch((err) => {
-        console.log(err);
+        message.warn("Sai tài khoản hoặc chưa đăng ký!");
+        console.log(err.response);
       });
   };
 
@@ -99,6 +104,7 @@ export function Login() {
                   type="primary"
                   htmlType="submit"
                   className="login-form-button"
+                  disabled={disable}
                 >
                   Đăng nhập
                 </Button>
