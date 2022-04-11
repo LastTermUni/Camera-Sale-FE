@@ -27,6 +27,7 @@ export function UpdateProduct() {
   const [newImg, setNewImg] = useState([]);
   const [price, setPrice] = useState("");
   const [img, setImg] = useState([]);
+
   const [disable, setDisable] = React.useState(false);
   const updateProd = (product) => {
     setDisable(true);
@@ -41,6 +42,7 @@ export function UpdateProduct() {
   function timeout(delay) {
     return new Promise((res) => setTimeout(res, delay));
   }
+
   useEffect(() => {
     dispatch(getProductDetail.getProductDetailRequest(id));
   }, [dispatch]);
@@ -101,6 +103,7 @@ export function UpdateProduct() {
                     }}
                     defaultValue={product.prodCate}
                   >
+
                     <Select.Option value="Máy ảnh">Máy ảnh</Select.Option>
                     <Select.Option value="Máy quay phim">
                       Máy quay phim

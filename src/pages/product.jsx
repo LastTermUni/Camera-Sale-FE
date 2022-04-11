@@ -36,9 +36,6 @@ export function Product() {
     // };
     // getProduct();
   }, [dispatch]);
-
-  //data product
-
   // console.log(product);
   //anim loading
   const Loading = () => {
@@ -116,6 +113,9 @@ export function Product() {
               <div className="title-product-detail">{product.prodName}</div>
               <div className="category-product-detail">
                 Loại: {product.prodCate}
+              </div>
+              <div className="description-product-detail">
+                {product.prodDesc}
               </div>
               <Input.TextArea className="description-product-detail"
               value={product.prodDesc}

@@ -85,12 +85,14 @@ export function CreateProdModal() {
                     })
                   }
                 >
+
                   <Select.Option value="Máy ảnh">Máy ảnh</Select.Option>
                   <Select.Option value="Máy quay phim">
                     Máy quay phim
                   </Select.Option>
                   <Select.Option value="Ống kính">Ống kính</Select.Option>
                   <Select.Option value="Tay cầm">Tay cầm (gimbal)</Select.Option>
+
                 </Select>
               </Form.Item>
               <Form.Item style={{ margin: "10px" }}>
