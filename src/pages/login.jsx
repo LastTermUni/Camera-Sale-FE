@@ -30,9 +30,9 @@ export function Login() {
       .then(async (response) => {
         setDisable(true);
         await message.success("Đăng nhập thành công!");
-        cookies.set("Login", user, { path: "/" });
-        let cookLogin = cookies.get("Login");
-        console.log("Login success" + "with userName: " + cookLogin.username);
+        console.log(response);
+        cookies.set("Login", response, { path: "/" });
+        console.log("Login success with idUser:" + response);
         navigate("/");
         window.location.reload();
       })
