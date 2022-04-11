@@ -16,7 +16,7 @@ import {
   Route,
 } from "react-router-dom";
 
- function App() {
+function App() {
   return (
     <Router>
       <Navbar />

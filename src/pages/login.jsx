@@ -1,30 +1,41 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Button, Checkbox, Col, Form, Input, Layout, Row } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../redux/action";
-
 import axios from "axios";
-
-
+import Cookies from "universal-cookie";
 export function Login() {
-
   const username = useRef("username");
   const password = useRef("password");
-  const handleSubmit = (value) => {
-    let user = value.username;
-    let pass = value.password;
-
-    axios.post("http://localhost:5000/user/login", { user, pass }).then(() => {
-      sessionStorage.setItem("login", value);
-      console.log("successs");
-    }).catch((err) => {
-      console.log(err)
-    })
+  const navigate = useNavigate();
+  const cookies = new Cookies();
+  const [user, setUser] = useState({
+    username: "",
+    password: "",
+  });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUser({
+      ...user,
+      [name]: value,
+    });
   };
-
-
+  const handleSubmit = (value) => {
+    axios
+      .post("http://localhost:5000/user/login", user)
+      .then(() => {
+        cookies.set("Login", user, { path: "/" });
+        let cookLogin = cookies.get("Login");
+        console.log("Login success" + "with userName: " + cookLogin.username);
+        navigate("/");
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <>
@@ -53,9 +64,11 @@ export function Login() {
                 rules={[{ required: true, message: "Hãy nhập tên tài khoản" }]}
               >
                 <Input
+                  name="username"
                   prefix={<UserOutlined className="site-form-item-icon" />}
                   placeholder="Tài khoản"
                   ref={username}
+                  onChange={handleChange}
                 />
               </Form.Item>
               <Form.Item
@@ -63,10 +76,12 @@ export function Login() {
                 rules={[{ required: true, message: "Hãy nhập mật khẩu" }]}
               >
                 <Input
+                  name="password"
                   prefix={<LockOutlined className="site-form-item-icon" />}
                   type="password"
                   placeholder="Mật khẩu"
                   ref={password}
+                  onChange={handleChange}
                 />
               </Form.Item>
               <Form.Item>
