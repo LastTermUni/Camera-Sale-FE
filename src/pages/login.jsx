@@ -1,4 +1,6 @@
+
 import React, { useEffect, useRef, useState } from "react";
+
 import { Button, Checkbox, Col, Form, Input, Layout, message, Row } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -19,6 +21,7 @@ export function Login() {
   const cookLogin = sessionStorage.getItem("UIHYPER");
   const now = new Date();
   const item = JSON.parse(cookLogin);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser({
@@ -26,6 +29,7 @@ export function Login() {
       [name]: value,
     });
   };
+
 
   useEffect(() => {
     if (cookLogin != null && now.getTime() > item.expiry) {
@@ -35,13 +39,13 @@ export function Login() {
       navigate("/");
     }
   }, []);
-
   const handleSubmit = (value) => {
     axios
       .post("http://localhost:5000/user/login", user)
       .then(async (response) => {
         setDisable(true);
         await message.success("Đăng nhập thành công!");
+
         // cookies.set("UserInfo", response, { path: "/" });
         sessionStorage.setItem("UIHYPER", JSON.stringify(response.data));
         console.log(response.data);
