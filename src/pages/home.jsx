@@ -39,7 +39,7 @@ export function Home() {
         <Row gutters={16} style={{ justifyContent: "center" }}>
           {products.map((product) => {
             return (
-              <div key={product.id}>
+              <div key={product._id}>
                 <Col span={5} style={{ margin: "10px" }}>
                   <Card
                     hoverable
@@ -113,7 +113,7 @@ export function Home() {
             })}
           </Carousel>
           <Divider orientation="center">Sản phẩm mới nhất</Divider>
-          {loading ? <Loading /> : <ShowProducts />}
+          <ShowProducts />
         </Content>
       </Layout>
     </>
