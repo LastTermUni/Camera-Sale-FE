@@ -27,10 +27,22 @@ export function UpdateProduct() {
   const [newImg, setNewImg] = useState([]);
   const [price, setPrice] = useState("");
   const [img, setImg] = useState([]);
-  const updateProd = (product) => {
-    dispatch(updateProduct.updateProductRequest(product));
-  };
+
+  const [disable, setDisable] = React.useState(false);
   const product = useSelector(productDetailState$);
+  const updateProd = (product) => {
+    setDisable(true);
+    dispatch(updateProduct.updateProductRequest(product));
+    async function delays() {
+      await timeout(1000);
+      navigate(`/san-pham/${product._id}`);
+    }
+    delays();
+  };
+  
+  function timeout(delay) {
+    return new Promise((res) => setTimeout(res, delay));
+  }
 
   useEffect(() => {
     dispatch(getProductDetail.getProductDetailRequest(id));
@@ -79,7 +91,7 @@ export function UpdateProduct() {
               <div style={{ padding: "8px" }}>
                 <Input
                   defaultValue={product.prodName}
-                  onChange={(e) => (product.prodName = e.target.defaultValue)}
+                  onChange={(e) => (product.prodName = e.target.value)}
                   className="title-product-detail"
                   placeholder="Tên sản phẩm"
                 />
@@ -92,8 +104,15 @@ export function UpdateProduct() {
                     }}
                     defaultValue={product.prodCate}
                   >
-                    <Select.Option value="demo">Demo</Select.Option>
-                    <Select.Option value="camera">Camera</Select.Option>
+
+                    <Select.Option value="Máy ảnh">Máy ảnh</Select.Option>
+                    <Select.Option value="Máy quay phim">
+                      Máy quay phim
+                    </Select.Option>
+                    <Select.Option value="Ống kính">Ống kính</Select.Option>
+                    <Select.Option value="Tay cầm">
+                      Tay cầm (gimbal)
+                    </Select.Option>
                   </Select>
                 </div>
 
@@ -120,7 +139,7 @@ export function UpdateProduct() {
                 <Input
                   defaultValue={product.prodPrice}
                   onChange={(e) => {
-                    product.prodPrice = e.target.defaultValue;
+                    product.prodPrice = e.target.value;
                   }}
                   placeholder="Giá sản phẩm"
                 />
@@ -143,6 +162,7 @@ export function UpdateProduct() {
                 <Button
                   className="btnAdd-product-detail"
                   onClick={() => updateProd(product)}
+                  disabled={disable}
                 >
                   Cập nhật
                 </Button>

@@ -1,5 +1,5 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   Button,
   Cascader,
@@ -12,6 +12,7 @@ import {
   Select,
 } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import axios from "axios";
 const { Option } = Select;
 const formItemLayout = {
   labelCol: {
@@ -44,7 +45,21 @@ const tailFormItemLayout = {
   },
 };
 export function Register() {
-
+  const [user, setUser] = useState({
+    username: "",
+    password: "",
+    customerName: "",
+    phone: "",
+    email: "",
+  });
+  const navigate = useNavigate();
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUser({
+      ...user,
+      [name]: value,
+    });
+  };
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
       <Select style={{ width: 70 }}>
@@ -52,14 +67,16 @@ export function Register() {
       </Select>
     </Form.Item>
   );
-  const onFinish = (values) => {
-    let data = values;
-    console.log("Received values of form: ", data);
-    axios.post("http://localhost:5000/user/register", { user, pass }).then(() => {
-      console.log("successs");
-    }).catch((err) => {
-      console.log(err)
-    })
+  const onFinish = () => {
+    axios
+      .post("http://localhost:5000/user/register", user)
+      .then(() => {
+        console.log("register success");
+        navigate("/login");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const [form] = Form.useForm();
@@ -91,7 +108,21 @@ export function Register() {
               scrollToFirstError
             >
               <Form.Item
-                name="email"
+                label="Tên tài khoản"
+                rules={[
+                  {
+                    required: true,
+                    message: "Hãy nhập tài khoản",
+                  },
+                ]}
+              >
+                <Input
+                  defaultValue={user.username}
+                  name="username"
+                  onChange={handleChange}
+                />
+              </Form.Item>
+              <Form.Item
                 value=""
                 label="E-mail"
                 rules={[
@@ -105,7 +136,11 @@ export function Register() {
                   },
                 ]}
               >
-                <Input />
+                <Input
+                  value={user.email}
+                  name="email"
+                  onChange={handleChange}
+                />
               </Form.Item>
               <Form.Item
                 name="password"
@@ -118,7 +153,11 @@ export function Register() {
                 ]}
                 hasFeedback
               >
-                <Input.Password />
+                <Input.Password
+                  value={user.password}
+                  name="password"
+                  onChange={handleChange}
+                />
               </Form.Item>
               <Form.Item
                 name="confirm"
@@ -159,36 +198,40 @@ export function Register() {
                   },
                 ]}
               >
-                <Input />
+                <Input
+                  value={user.customerName}
+                  name="customerName"
+                  onChange={handleChange}
+                />
               </Form.Item>
               <Form.Item
-                name="phone"
-                value=""
                 label="Số điện thoại"
                 rules={[{ required: true, message: "Hãy nhập số điện thoại!" }]}
               >
-                <Input addonBefore={prefixSelector} style={{ width: "100%" }} />
+                <Input
+                  name="phone"
+                  addonBefore={prefixSelector}
+                  style={{ width: "100%" }}
+                  value={user.phone}
+                  onChange={handleChange}
+                />
               </Form.Item>
 
               <Checkbox style={{ marginLeft: "33%", marginBottom: "10px" }}>
                 Tôi chấp nhận <a href="">điều khoản</a>
               </Checkbox>
-              <Form.Item
-                {...tailFormItemLayout}
-                style={{ justifyContent: "center" }}
+
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="register-form-button"
               >
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  className="register-form-button"
-                >
-                  Đăng ký
-                </Button>
-                <div style={{ float: "right" }}>
-                  Đã có tài khoản?
-                  <NavLink to="/login"> Đăng nhập!</NavLink>
-                </div>
-              </Form.Item>
+                Đăng ký
+              </Button>
+              <div style={{ float: "right" }}>
+                Đã có tài khoản?
+                <NavLink to="/login"> Đăng nhập!</NavLink>
+              </div>
             </Form>
           </div>
         </Row>

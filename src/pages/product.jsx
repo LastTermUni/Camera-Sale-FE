@@ -1,4 +1,4 @@
-import { Col, Layout, Row, Button } from "antd";
+import { Col, Layout, Row, Button, Typography, Input } from "antd";
 import NumberFormat from "react-number-format";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -23,14 +23,10 @@ export function Product() {
     dispatch(addCart(product));
   };
 
-  const delProduct = React.useCallback(
-    (id) => {
-      dispatch(actions.delProduct.delProductRequest(id));
-      navigate("/san-pham");
-    },
-    [dispatch]
-  );
-
+  const delProduct = (id) => {
+    dispatch(actions.delProduct.delProductRequest(id));
+    navigate("/san-pham");
+  };
   useEffect(() => {
     dispatch(actions.getProductDetail.getProductDetailRequest(id));
     // const getProduct = async () => {
@@ -40,9 +36,6 @@ export function Product() {
     // };
     // getProduct();
   }, [dispatch]);
-
-  //data product
-
   // console.log(product);
   //anim loading
   const Loading = () => {
@@ -124,6 +117,12 @@ export function Product() {
               <div className="description-product-detail">
                 {product.prodDesc}
               </div>
+              <Input.TextArea className="description-product-detail"
+              value={product.prodDesc}
+              bordered={false}
+              autoSize={true}
+              readOnly={true}
+              />
 
               <NumberFormat
                 value={product.prodPrice}
