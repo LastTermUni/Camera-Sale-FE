@@ -8,7 +8,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { useSelector } from "react-redux";
-import { Navigate, NavLink } from "react-router-dom";
+import { Navigate, NavLink, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 const { Header } = Layout;
 
@@ -22,15 +22,21 @@ export const Navbar = () => {
       window.removeEventListener("scroll", isSticky);
     };
   });
+
+  const navigate = useNavigate();
   const cookies = new Cookies();
-  const cookLogin = cookies.get("Login");
+  const cookLogin = sessionStorage.getItem("UIHYPER");
+  const now = new Date();
+  const item = JSON.parse(cookLogin);
   useEffect(() => {
-    if (cookLogin == null) {
+    if (cookLogin == null || now.getTime() > item.expiry) {
       setUser(false);
+      sessionStorage.removeItem("UIHYPER");
     } else {
       setUser(true);
     }
-  }, [cookLogin]);
+  });
+
   const isSticky = (e) => {
     const header = document.querySelector("#header-section");
     const scrollTop = window.scrollY;
@@ -40,9 +46,14 @@ export const Navbar = () => {
   };
   function handleMenuClick(e) {
     if (e.key == 1) {
-      cookies.remove("Login", { path: "/" });
+
+      sessionStorage.removeItem("UIHYPER");
       setUser(false);
     }
+    if (e.key == 2) {
+      navigate("/login");
+    }
+
   }
   const menu = (
     <Menu onClick={handleMenuClick}>
